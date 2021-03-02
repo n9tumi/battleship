@@ -19,6 +19,7 @@ export default class Gameboard extends React.Component{
         super(props);
         this.state = {
             status: 'Game has not started',
+            name1: 'Start game',
             hits: 0,
             bombs: 15,
             ships: 3,
@@ -52,13 +53,10 @@ export default class Gameboard extends React.Component{
     }
 
     drawItem(number){
-        if (this.state.status === 'Game has not started' || this.state.status === 'You sinked all ships.'
-         || this.state.status === 'Timeout. Ships remaining.'
-         || this.state.status === "Game over. Ships remaning."){
-            this.setState({status: 'Click the start button firs...'})
-
+        if (this.state.status === 'Game has not started' ){
+            this.setState({status: 'Click the start button first...'})
         }
-
+        
         
         else if(this.state.status === 'Game is on...' && board[number] != CROSS && board[number] != CIRCLE){
 
@@ -97,6 +95,7 @@ export default class Gameboard extends React.Component{
         
         this.setState({
             status: 'Game is on...',
+            name1: 'New game',
             hits: 0,
             bombs: 15,
             ships: this.state.startingships,
@@ -112,6 +111,10 @@ export default class Gameboard extends React.Component{
         }
         else if(this.state.bombs <= 0){
             this.setState({status: "Game over. Ships remaning."})
+        }if (this.state.status != 'Game has not started' && this.state.status != 'Click the start button first...'){
+            this.setState({name1: 'New game'});
+        }else{
+            this.setState({name1: 'Start game'});
         }
     } 
 
@@ -128,7 +131,7 @@ export default class Gameboard extends React.Component{
         this.checkGameStatus()
         
         if (this.state.status === "Game is on..."){
-         
+            
            if (this.state.counter > 0){
                 this.setState({
                     counter: this.state.counter - 1
@@ -139,6 +142,7 @@ export default class Gameboard extends React.Component{
                 this.setState({status: "Timeout. Ships remaining."});
             }
         }
+       
       }
 
 
@@ -191,7 +195,7 @@ export default class Gameboard extends React.Component{
                 <View style={styles.flex}>{fourthRow}</View>
                 <View style={styles.flex}>{fifthRow}</View>
                 <Pressable style={styles.button} onPress={()=> this.startGame()}>
-                    <Text style={styles.buttonText}>Start Game</Text>
+                    <Text style={styles.buttonText}>{this.state.name1}</Text>
                 </Pressable>
                 <Text style={styles.gameinfo}>Hits: {this.state.hits}   Bombs: {this.state.bombs}    Ships: {this.state.ships}</Text>
                 <Text style={styles.gameinfo}>Timer: {this.state.counter/10} sec</Text>
